@@ -1,4 +1,82 @@
+שלום,
+
+אני יוצר עבורך קובץ PDF עם תיאור האלגוריתם Randomized-QuickSelect ואנליזה, מסודר מימין לשמאל עם צבעים להדגשה.
+
+```html
 <!DOCTYPE html>
+<html dir="rtl">
+<head>
+    <meta name="google-site-verification" content="4j5ULNTNE2ixVPpcLIiCN8Q4c06Ce2WU94GCSvMtyeU" />
+
+<meta charset="UTF-8">
+<title>Randomized-QuickSelect</title>
+<style>
+body { font-family: Arial, sans-serif; line-height: 1.6; background-color: #f9f9f9; padding: 20px; }
+h1 { color: #1E90FF; }
+h2 { color: #2E8B57; }
+h3 { color: #FF8C00; }
+p { color: #333; }
+code { background-color: #eee; padding: 2px 4px; border-radius: 4px; }
+section { background-color: #fff; padding: 15px; margin-bottom: 15px; border-radius: 8px; box-shadow: 2px 2px 5px rgba(0,0,0,0.1); }
+</style>
+</head>
+<body>
+<section>
+<h1>Randomized-QuickSelect – תיאור האלגוריתם ואנליזה</h1>
+
+<h2>מטרת האלגוריתם</h2>
+<p>אלגוריתם <strong>Randomized-QuickSelect</strong> נועד למצוא את האיבר ה-<code>k</code>-י הקטן ביותר במערך, <strong>בממוצע בזמן לינארי</strong>.</p>
+</section>
+
+<section>
+<h2>תכונות מפתח</h2>
+<ul>
+<li>גודל המערך בכל שלב <code>i</code> הוא משתנה אקראי: <code>n_i</code>.</li>
+<li>מספר ההשוואות בכל שלב הוא <strong>לינארי</strong> ביחס לגודל המערך הנוכחי: <code>O(n_i)</code>.</li>
+<li>העבודה הכוללת היא סכום כל ה-<code>n_i</code>-ים.</li>
+</ul>
+</section>
+
+<section>
+<h2>אינטואיציה</h2>
+<ol>
+<li>בכל שלב נבחר <strong>איבר ציר אקראי</strong> (<code>pivot</code>) מהמערך.</li>
+<li>האיבר מחלק את המערך לשני חלקים:
+<ul>
+<li>איברים קטנים ממנו</li>
+<li>איברים גדולים ממנו</li>
+</ul>
+</li>
+<li>ההסתברות שאיבר הציר ייפול באחד משני חצאי המערך היא <code>1/2</code>.</li>
+<li>במקרה הממוצע, נצמצם את גודל המערך הנותר בכ-<strong>3/4</strong> בכל שלב.</li>
+<li>הסיבוכיות הכוללת בממוצע היא <code>O(n)</code>.</li>
+</ol>
+</section>
+
+<section>
+<h2>השפעת ערך k</h2>
+<p>מיקום האיבר שאנו מחפשים משפיע על התנהגות האלגוריתם אך <strong>לא על זמן הריצה הממוצע</strong>.</p>
+<h3>מקרים קיצוניים (k ≈ 1 או k ≈ n)</h3>
+<ul>
+<li>חיפוש איבר קיצוני יכול לגרום להסרה של רוב המערך במכה אחת.</li>
+<li>אם הציר נבחר בקצה המנוגד ל-k, נתקדם בחלק הגדול יותר של המערך, מה שעלול להאט את התהליך.</li>
+</ul>
+<h3>מקרה אמצעי (k ≈ n/2)</h3>
+<ul>
+<li>חיפוש החציון מצמצם את המערך בכ-חצי בכל בחירת ציר אקראית.</li>
+<li>זהו המקרה האופטימלי מבחינת קצב הצמצום.</li>
+</ul>
+</section>
+
+<section>
+<h2>הערה חשובה</h2>
+<p>גם במקרה הגרוע ביותר, ההסתברות שאיבר הציר יימצא ב-<strong>75%</strong> הטובים ביותר של המערך (ובכך יבטיח צמצום של לפחות <code>1/4</code> מהמערך) היא <code>1/2</code> בכל שלב.</p>
+<p>תכונה זו מבטיחה ש<strong>זמן הריצה הממוצע של האלגוריתם הוא לינארי עבור כל ערך של k</strong>.</p>
+</section>
+
+</body>
+</html>
+```<!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -139,3 +217,4 @@ ContainCount(x):  // קטעים סגורים [a,b]
   </div>
 </body>
 </html>
+
