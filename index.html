@@ -1,25 +1,39 @@
-
 <!DOCTYPE html>
-<html dir="rtl">
+<html dir="rtl" lang="he">
 <head>
-    <meta name="google-site-verification" content="4j5ULNTNE2ixVPpcLIiCN8Q4c06Ce2WU94GCSvMtyeU" />
-
 <meta charset="UTF-8">
 <title>Randomized-QuickSelect</title>
 <style>
-body { font-family: Arial, sans-serif; line-height: 1.6; background-color: #f9f9f9; padding: 20px; }
-h1 { color: #1E90FF; }
-h2 { color: #2E8B57; }
-h3 { color: #FF8C00; }
-p { color: #333; }
-code { background-color: #eee; padding: 2px 4px; border-radius: 4px; }
-section { background-color: #fff; padding: 15px; margin-bottom: 15px; border-radius: 8px; box-shadow: 2px 2px 5px rgba(0,0,0,0.1); }
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    background-color: #0d1117; /* GitHub Dark - Background */
+    color: #c9d1d9; /* GitHub Dark - Text */
+    padding: 20px;
+}
+h1 { color: #58a6ff; /* GitHub Dark - Blue */ }
+h2 { color: #8b949e; /* GitHub Dark - Gray */ }
+h3 { color: #f0883e; /* GitHub Dark - Orange */ }
+p { color: #c9d1d9; }
+code {
+    background-color: #161b22; /* GitHub Dark - Code Background */
+    color: #c9d1d9;
+    padding: 2px 4px;
+    border-radius: 4px;
+}
+section {
+    background-color: #161b22; /* GitHub Dark - Section Background */
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+    border: 1px solid #30363d;
+}
 </style>
 </head>
 <body>
 <section>
 <h1>Randomized-QuickSelect – תיאור האלגוריתם ואנליזה</h1>
-
 <h2>מטרת האלגוריתם</h2>
 <p>אלגוריתם <strong>Randomized-QuickSelect</strong> נועד למצוא את האיבר ה-<code>k</code>-י הקטן ביותר במערך, <strong>בממוצע בזמן לינארי</strong>.</p>
 </section>
@@ -69,10 +83,9 @@ section { background-color: #fff; padding: 15px; margin-bottom: 15px; border-rad
 <p>גם במקרה הגרוע ביותר, ההסתברות שאיבר הציר יימצא ב-<strong>75%</strong> הטובים ביותר של המערך (ובכך יבטיח צמצום של לפחות <code>1/4</code> מהמערך) היא <code>1/2</code> בכל שלב.</p>
 <p>תכונה זו מבטיחה ש<strong>זמן הריצה הממוצע של האלגוריתם הוא לינארי עבור כל ערך של k</strong>.</p>
 </section>
-
 </body>
 </html>
-```<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -80,15 +93,15 @@ section { background-color: #fff; padding: 15px; margin-bottom: 15px; border-rad
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
   :root {
-    --bg: #0f172a;        /* slate-900 */
-    --panel: #111827;     /* gray-900 */
-    --text: #e5e7eb;      /* gray-200 */
-    --muted: #9ca3af;     /* gray-400 */
-    --accent: #60a5fa;    /* blue-400 */
-    --ok: #34d399;        /* emerald-400 */
-    --warn: #f59e0b;      /* amber-500 */
-    --bad: #f87171;       /* red-400 */
-    --chip: #1f2937;      /* gray-800 */
+    --bg: #0d1117;        /* GitHub Dark - Background */
+    --panel: #161b22;     /* GitHub Dark - Panel */
+    --text: #c9d1d9;      /* GitHub Dark - Text */
+    --muted: #8b949e;     /* GitHub Dark - Muted Text */
+    --accent: #58a6ff;    /* GitHub Dark - Blue */
+    --ok: #238636;        /* GitHub Dark - Green */
+    --warn: #d29922;      /* GitHub Dark - Yellow */
+    --bad: #f85149;       /* GitHub Dark - Red */
+    --chip: #30363d;      /* GitHub Dark - Chip Background */
   }
   * { box-sizing: border-box; }
   body {
@@ -98,7 +111,7 @@ section { background-color: #fff; padding: 15px; margin-bottom: 15px; border-rad
   }
   .wrap { max-width: 980px; margin: 0 auto; }
   h1, h2, h3 { line-height: 1.2; margin: 0 0 12px; }
-  h1 { font-size: 40px; color: var(--accent); text-shadow: 0 8px 30px rgba(96,165,250,.35); }
+  h1 { font-size: 40px; color: var(--accent); text-shadow: 0 8px 30px rgba(88,166,255,.35); }
   h2 { font-size: 26px; color: #a78bfa; margin-top: 28px; }
   h3 { font-size: 20px; color: #f472b6; }
   p, li { font-size: 18px; }
@@ -171,8 +184,8 @@ section { background-color: #fff; padding: 15px; margin-bottom: 15px; border-rad
       <div class="card">
         <h3>סיבוכיות</h3>
         <ul>
-          <li>הכנסה/מחיקה: <code>O(log n)</code> בכל עץ &rarr; בסה"כ <code>O(log n)</code>.</li>
-          <li>שאילתה: שתי פעולות <code>rank</code> בלוגאריתם &rarr; <code>O(log n)</code>.</li>
+          <li>הכנסה/מחיקה: <code>O(log n)</code> בכל עץ ← בסה"כ <code>O(log n)</code>.</li>
+          <li>שאילתה: שתי פעולות <code>rank</code> בלוגאריתם ← <code>O(log n)</code>.</li>
           <li>זיכרון: <code>O(n)</code>.</li>
         </ul>
       </div>
@@ -203,7 +216,7 @@ ContainCount(x):  // קטעים סגורים [a,b]
       <p>קטעים: <code>[1,4], [2,6], [5,7]</code>. עבור <code>x=5</code>:</p>
       <ul>
         <li><code>T<sub>L</sub>.rank(5) = 3</code> (התחלויות ≤ 5 הן 1,2,5)</li>
-        <li><code>T<sub>R</sub>.rank(5) = 1</code> (סיומים &lt; 5 הוא רק 4)</li>
+        <li><code>T<sub>R</sub>.rank(5) = 1</code> (סיומים < 5 הוא רק 4)</li>
       </ul>
       <p class="ok"><strong>ContainCount(5) = 3 − 1 = 2</strong> → הקטעים <code>[2,6]</code> ו-<code>[5,7]</code> מכסים.</p>
     </div>
@@ -213,5 +226,66 @@ ContainCount(x):  // קטעים סגורים [a,b]
   </div>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>Hash Table - Linear Probing</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            direction: rtl;
+            background-color: #0d1117; /* GitHub Dark - Background */
+            color: #c9d1d9; /* GitHub Dark - Text */
+            padding: 20px;
+        }
+        h1, h2 {
+            color: #58a6ff; /* GitHub Dark - Blue */
+        }
+        p {
+            margin-bottom: 15px;
+        }
+        .important {
+            color: #f85149; /* GitHub Dark - Red */
+            font-weight: bold;
+        }
+        code {
+            background-color: #161b22; /* GitHub Dark - Code Background */
+            color: #c9d1d9;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+        section {
+            background-color: #161b22;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+            border: 1px solid #30363d;
+        }
+    </style>
+</head>
+<body>
+    <section>
+        <h1>שאלה 8 – Hash Table עם Linear Probing</h1>
+        <p>השאלה עוסקת בטבלאות <strong>hash</strong> עם <strong>open addressing</strong> ו-<strong>linear probing</strong>.</p>
+        <p>כמו שידוע, בטבלאות hash עם open addressing, אנו מוחקים רשומות בתא המתאים על ידי שימוש בערך מיוחד <code>DELETED</code>. במקרה של linear probing בעת חיפוש או הכנסה, אם תא מסוים תפוס מנסים את התא הבא באינדקס (מודולו גודל הטבלה) שוב ושוב.</p>
+    </section>
 
+    <section>
+        <h2>הטענה</h2>
+        <p>אחד טוען כי במקרה הבא ניתן לוותר על הערך <code>DELETED</code> ופשוט למחוק את העריב מהתא ולהשאירו ריק: כאשר רוצים למחוק את העריב בתא <code>i</code>, והאיבר <code>k</code> שנמצא בתא <code>i+1</code> מקיים <code>h(k,0)=i+1</code>, כלומר האיבר מימין לתא שרוצים למחוק נמצא במקום הראשון אליו ניסה להיכנס.</p>
+    </section>
 
+    <section>
+        <h2>שאלה</h2>
+        <p>האם אחד צודק? הסבירו מדוע כן, או הראו דוגמה שבה הטבלה לא מתפקדת כראוי.</p>
+    </section>
+
+    <section>
+        <h2 class="important">תשובה</h2>
+        <p>אחד טועה! אפשר לתת דוגמה שבה האיבר שיושב בתא i+2 רוצה להיכנס במקור לתא i, אבל גם תא i וגם i+1 היו תפוסים ולכן נכנס לתא i+2. כאשר נמחק תא i+1 באופן מלא, נשבור את שרשרת החיפוש עבור תא i+2.</p>
+    </section>
+</body>
+</html>
