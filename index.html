@@ -1,76 +1,141 @@
-
 <!DOCTYPE html>
-<html dir="rtl">
+<html lang="he" dir="rtl">
 <head>
-    <meta name="google-site-verification" content="4j5ULNTNE2ixVPpcLIiCN8Q4c06Ce2WU94GCSvMtyeU" />
-
 <meta charset="UTF-8">
-<title>Randomized-QuickSelect</title>
+<title>ספירת קטעים מכסים: TL ו-TR (ContainCount)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-body { font-family: Arial, sans-serif; line-height: 1.6; background-color: #f9f9f9; padding: 20px; }
-h1 { color: #1E90FF; }
-h2 { color: #2E8B57; }
-h3 { color: #FF8C00; }
-p { color: #333; }
-code { background-color: #eee; padding: 2px 4px; border-radius: 4px; }
-section { background-color: #fff; padding: 15px; margin-bottom: 15px; border-radius: 8px; box-shadow: 2px 2px 5px rgba(0,0,0,0.1); }
+  :root {
+    --bg: #0f172a;        /* slate-900 */
+    --panel: #111827;     /* gray-900 */
+    --text: #e5e7eb;      /* gray-200 */
+    --muted: #9ca3af;     /* gray-400 */
+    --accent: #60a5fa;    /* blue-400 */
+    --ok: #34d399;        /* emerald-400 */
+    --warn: #f59e0b;      /* amber-500 */
+    --bad: #f87171;       /* red-400 */
+    --chip: #1f2937;      /* gray-800 */
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 32px;
+    background: radial-gradient(1200px 800px at 80% -10%, #1f2937 0%, var(--bg) 50%);
+    color: var(--text); font-family: "Heebo", "Rubik", "Segoe UI", Arial, sans-serif; line-height: 1.75;
+  }
+  .wrap { max-width: 980px; margin: 0 auto; }
+  h1, h2, h3 { line-height: 1.2; margin: 0 0 12px; }
+  h1 { font-size: 40px; color: var(--accent); text-shadow: 0 8px 30px rgba(96,165,250,.35); }
+  h2 { font-size: 26px; color: #a78bfa; margin-top: 28px; }
+  h3 { font-size: 20px; color: #f472b6; }
+  p, li { font-size: 18px; }
+  .card {
+    background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(0,0,0,.15));
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 16px; padding: 20px; margin: 18px 0;
+    box-shadow: 0 10px 40px rgba(0,0,0,.35);
+  }
+  .chips { display: flex; gap: 8px; flex-wrap: wrap; margin: 8px 0 0; }
+  .chip { background: var(--chip); border: 1px solid rgba(255,255,255,.08); border-radius: 999px; padding: 4px 10px; font-size: 14px; color: var(--muted); }
+  code, kbd {
+    background: #0b1020; border: 1px solid rgba(255,255,255,.1); padding: 2px 6px; border-radius: 6px;
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: 0.95em; color: #cbd5e1;
+  }
+  .formula { font-size: 20px; background: #0b1325; padding: 12px 14px; border-radius: 12px; border: 1px solid rgba(255,255,255,.08); overflow-x:auto }
+  ul { margin-top: 8px; }
+  .ok { color: var(--ok); }
+  .warn { color: var(--warn); }
+  .bad { color: var(--bad); }
+  .small { color: var(--muted); font-size: 14px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); gap: 14px; }
+  .foot { margin-top: 36px; color: var(--muted); font-size: 14px; }
 </style>
 </head>
 <body>
-<section>
-<h1>Randomized-QuickSelect – תיאור האלגוריתם ואנליזה</h1>
+  <div class="wrap">
+    <h1>מבנה נתונים לספירת קטעים מכסים (ContainCount)</h1>
+    <div class="chips">
+      <span class="chip">Insert(a,b)</span>
+      <span class="chip">Delete(p)</span>
+      <span class="chip">ContainCount(x)</span>
+      <span class="chip">זמן לוגאריתמי ממוצע</span>
+    </div>
 
-<h2>מטרת האלגוריתם</h2>
-<p>אלגוריתם <strong>Randomized-QuickSelect</strong> נועד למצוא את האיבר ה-<code>k</code>-י הקטן ביותר במערך, <strong>בממוצע בזמן לינארי</strong>.</p>
-</section>
+    <div class="card">
+      <h2>הרעיון בקצרה</h2>
+      <p>נחזיק שני עצי דירוג (Order-Statistic Trees):</p>
+      <ul>
+        <li><strong>TL</strong> – כל ערכי ההתחלה <code>a</code> של הקטעים.</li>
+        <li><strong>TR</strong> – כל ערכי הסיום <code>b</code> של הקטעים.</li>
+      </ul>
+      <p>בשאילתה <code>ContainCount(x)</code> אנו רוצים את מספר הקטעים הסגורים <code>[a,b]</code> שמקיימים <code>a ≤ x ≤ b</code>.</p>
+      <div class="formula">
+        נסמן <code>T<sub>L</sub>.rank(x)</code> = מספר ה-<code>a</code>-ים שמקיימים <code>a ≤ x</code>.<br>
+        נסמן <code>T<sub>R</sub>.rank(x)</code> = מספר ה-<code>b</code>-ים שמקיימים <span class="bad"><code>b &lt; x</code></span> (שימו לב: קטן ממש!).
+      </div>
+      <p class="ok"><strong>לכן:</strong> מספר הקטעים שמכסים את <code>x</code> הוא</p>
+      <div class="formula"><strong>ContainCount(x) = T<sub>L</sub>.rank(x) − T<sub>R</sub>.rank(x)</strong></div>
+      <p class="small">החיסור נדרש כי <code>T<sub>R</sub>.rank(x)</code> סופר את כל הקטעים שהסתיימו <em>לפני</em> <code>x</code> (כלומר <code>b &lt; x</code>) — אלה לא מכסים את <code>x</code>.</p>
+    </div>
 
-<section>
-<h2>תכונות מפתח</h2>
-<ul>
-<li>גודל המערך בכל שלב <code>i</code> הוא משתנה אקראי: <code>n_i</code>.</li>
-<li>מספר ההשוואות בכל שלב הוא <strong>לינארי</strong> ביחס לגודל המערך הנוכחי: <code>O(n_i)</code>.</li>
-<li>העבודה הכוללת היא סכום כל ה-<code>n_i</code>-ים.</li>
-</ul>
-</section>
+    <div class="grid">
+      <div class="card">
+        <h3>למה לא ≤ ב-TR?</h3>
+        <p>הקטעים הם <strong>סגורים</strong> (<code>[a,b]</code>), לכן קטע עם <code>b = x</code> עדיין <span class="ok">מכסה</span> את <code>x</code>. אם היינו משתמשים ב-<code>b ≤ x</code> היינו גורעים בטעות גם את אלה עם <code>b = x</code>.</p>
+      </div>
 
-<section>
-<h2>אינטואיציה</h2>
-<ol>
-<li>בכל שלב נבחר <strong>איבר ציר אקראי</strong> (<code>pivot</code>) מהמערך.</li>
-<li>האיבר מחלק את המערך לשני חלקים:
-<ul>
-<li>איברים קטנים ממנו</li>
-<li>איברים גדולים ממנו</li>
-</ul>
-</li>
-<li>ההסתברות שאיבר הציר ייפול באחד משני חצאי המערך היא <code>1/2</code>.</li>
-<li>במקרה הממוצע, נצמצם את גודל המערך הנותר בכ-<strong>3/4</strong> בכל שלב.</li>
-<li>הסיבוכיות הכוללת בממוצע היא <code>O(n)</code>.</li>
-</ol>
-</section>
+      <div class="card">
+        <h3>פעולות</h3>
+        <ul>
+          <li><code>Init()</code> – יצירת TL ו-TR ריקים.</li>
+          <li><code>Insert(a, b)</code> – הוספת <code>a</code> ל-TL והוספת <code>b</code> ל-TR.</li>
+          <li><code>Delete(p)</code> – הסרת <code>a(p)</code> מ-TL והסרת <code>b(p)</code> מ-TR.</li>
+          <li><code>ContainCount(x)</code> – החזרת <code>T<sub>L</sub>.rank(x) − T<sub>R</sub>.rank(x)</code>.</li>
+        </ul>
+      </div>
 
-<section>
-<h2>השפעת ערך k</h2>
-<p>מיקום האיבר שאנו מחפשים משפיע על התנהגות האלגוריתם אך <strong>לא על זמן הריצה הממוצע</strong>.</p>
-<h3>מקרים קיצוניים (k ≈ 1 או k ≈ n)</h3>
-<ul>
-<li>חיפוש איבר קיצוני יכול לגרום להסרה של רוב המערך במכה אחת.</li>
-<li>אם הציר נבחר בקצה המנוגד ל-k, נתקדם בחלק הגדול יותר של המערך, מה שעלול להאט את התהליך.</li>
-</ul>
-<h3>מקרה אמצעי (k ≈ n/2)</h3>
-<ul>
-<li>חיפוש החציון מצמצם את המערך בכ-חצי בכל בחירת ציר אקראית.</li>
-<li>זהו המקרה האופטימלי מבחינת קצב הצמצום.</li>
-</ul>
-</section>
+      <div class="card">
+        <h3>סיבוכיות</h3>
+        <ul>
+          <li>הכנסה/מחיקה: <code>O(log n)</code> בכל עץ &rarr; בסה"כ <code>O(log n)</code>.</li>
+          <li>שאילתה: שתי פעולות <code>rank</code> בלוגאריתם &rarr; <code>O(log n)</code>.</li>
+          <li>זיכרון: <code>O(n)</code>.</li>
+        </ul>
+      </div>
+    </div>
 
-<section>
-<h2>הערה חשובה</h2>
-<p>גם במקרה הגרוע ביותר, ההסתברות שאיבר הציר יימצא ב-<strong>75%</strong> הטובים ביותר של המערך (ובכך יבטיח צמצום של לפחות <code>1/4</code> מהמערך) היא <code>1/2</code> בכל שלב.</p>
-<p>תכונה זו מבטיחה ש<strong>זמן הריצה הממוצע של האלגוריתם הוא לינארי עבור כל ערך של k</strong>.</p>
-</section>
+    <div class="card">
+      <h2>פסאודו-קוד</h2>
+<pre><code>Init():
+    TL ← OrderStatisticTree()   // מחזיק את כל ה-a
+    TR ← OrderStatisticTree()   // מחזיק את כל ה-b
 
+Insert(a, b):
+    TL.insert(a)
+    TR.insert(b)
+
+Delete(a, b):
+    TL.delete(a)
+    TR.delete(b)
+
+ContainCount(x):  // קטעים סגורים [a,b]
+    return TL.rank_at_most(x) - TR.rank_strictly_less(x)
+</code></pre>
+      <p class="small">במימוש עם עץ אדום-שחור מועשר (או AVL) מחשבים <code>rank</code> לפי גדלי תתי-עצים.</p>
+    </div>
+
+    <div class="card">
+      <h2>דוגמה זריזה</h2>
+      <p>קטעים: <code>[1,4], [2,6], [5,7]</code>. עבור <code>x=5</code>:</p>
+      <ul>
+        <li><code>T<sub>L</sub>.rank(5) = 3</code> (התחלויות ≤ 5 הן 1,2,5)</li>
+        <li><code>T<sub>R</sub>.rank(5) = 1</code> (סיומים &lt; 5 הוא רק 4)</li>
+      </ul>
+      <p class="ok"><strong>ContainCount(5) = 3 − 1 = 2</strong> → הקטעים <code>[2,6]</code> ו-<code>[5,7]</code> מכסים.</p>
+    </div>
+
+    <p class="foot">הערה: אם הקלט דיסקרטי ותרצו לכלול קטעים פתוחים/חצי-פתוחים, מחליפים את כיווני השוויון בהתאם (למשל לספור ב-TR את
+    <code>b ≤ x−1</code> בדיסקרטי, או להשתמש ב-<code>x−ε</code> ברציף).</p>
+  </div>
 </body>
 </html>
-```
-
